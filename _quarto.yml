@@ -1,0 +1,14 @@
+project:
+  type: website
+  output-dir: docs
+execute:
+  cache: true
+  echo: true
+bibliography: ref.bib
+csl: ieee.csl
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    scrollable: true
+    smaller: true
+    slide-number: true
