@@ -95,16 +95,16 @@ table.dataframe {
 }
 
 .reveal code {
-  background-color: #f4f4f4;
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
   font-size: 1em;
   font-family: 'Fira Code', 'Courier New', monospace;
   color: #d63384;  /* 예: 진한 핑크/보라 계열 */
 }
 
 /* 테이블 전체 왼쪽 정렬 */
-.reveal table td, 
+.reveal table td,
 .reveal table th {
   text-align: left !important;
 }

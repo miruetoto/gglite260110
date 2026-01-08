@@ -4,7 +4,7 @@ bibliography: ref.bib
 author: "최규빈"
 subtitle: ""
 institute: "전북대학교 통계학과"
-date: "01/05/2026"
+date: "01/10/2026"
 title-block-style: default
 title-block-banner: true
 csl: ieee.csl
@@ -12,6 +12,10 @@ csl: ieee.csl
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, fig.width=7, fig.height=4)
+
+# Python 설정 (.venv 사용)
+library(reticulate)
+use_python(".venv/bin/python", required = TRUE)
 
 # gglite 패키지 설치 및 로드
 pkg_path <- file.path(".", "gglite", "github", "gglite")
@@ -362,21 +366,11 @@ library(patchwork)
 
 ### gglite란?
 
-**gglite**는 ggplot2의 **보완재**로서, 빠른 탐색적 그래픽 생성을 위한 경량 R 패키지
+**gglite**: ggplot2의 **보완재**로서, 빠른 탐색적 그래픽 생성을 위한 경량 R 패키지
 
 - ggplot2 생태계와 **완전한 상호운용성** 유지 (함께 사용)
 - qplot이 목표했던 "빠른 시각화"를 **제대로 완성**
 - **qplot의 대체재**: qplot의 한계를 극복한 직관적 인터페이스
-
----
-
-### 패키지 간 관계
-
-| 관계 | 설명 |
-|------|------|
-| ggplot2 + qplot | 보완재 (qplot은 ggplot2의 간편 함수) |
-| ggplot2 + gglite | **보완재** (함께 사용, 완전 호환) |
-| gglite vs qplot | **대체재** (gglite가 qplot 역할을 더 잘 수행) |
 
 ---
 
@@ -387,40 +381,11 @@ library(patchwork)
 - 탐색적 데이터 분석에서 미적 매핑과 데이터 프레임의 **명시적 지정**이 불필요한 장황함 야기
 - Wide-form 데이터 사용 시 `tidyr::pivot_longer()` 등 **사전 변환 필요**
 
-**gglite의 해결책**
+**gglite**
 
 - 벡터, 행렬 등 다양한 입력 형식 직접 지원
 - 내부적으로 자동 변환 후 ggplot2 객체 반환
 - Base R과 같은 빠른 플로팅 경험 + ggplot2의 세련된 그래픽
-
----
-
-### 주요 시각화 패키지 비교
-
-::: {style="font-size: 0.8em;"}
-
-| 패키지 | 언어 | 철학 | 입력 유연성 | Long-form | Wide-form | 학습 곡선 |
-|--------|------|------|-------------|-----------|-----------|-----------|
-| Base R | R | 빠른 탐색 | 높음 (벡터, 행렬, 리스트, DF) | 중간 | 높음 | 낮음 |
-| ggplot2 | R | Grammar of Graphics | 낮음 (주로 DF) | 높음 | 낮음* | 중간 |
-| plotly | R/Python | 인터랙티브 | 중간 | 중간 | 중간 | 중간 |
-| **gglite** | R | 단순성 + grammar | **높음 (벡터, 행렬, DF)** | **높음** | **높음** | **낮음** |
-| matplotlib | Python | 유연성 | 높음 (array, list, DF) | 중간 | 높음 | 높음 |
-| seaborn | Python | 통계적 시각화 | 높음 (array, DF) | 높음 | 높음 | 낮음 |
-| altair | Python | 선언적 grammar | 낮음 (주로 DF) | 높음 | 낮음 | 중간 |
-
-\*ggplot2는 wide-form 데이터 사용을 위해 사전 변환(`pivot_longer()` 등) 필요
-
-:::
-
----
-
-### gglite의 독특한 위치
-
-1. Base R과 matplotlib/seaborn의 **입력 유연성**
-2. ggplot2의 **long-form(tidy data) 지원**
-3. seaborn의 **wide-form 데이터 직접 처리 능력**
-4. **낮은 학습곡선**
 
 ---
 
@@ -441,6 +406,105 @@ library(ggplot2)
 
 ---
 
+### 사용방법
+
+::: {.columns}
+
+::: {.column width="35%"}
+**Lesson 1: 함수 대응**
+
+| ggplot2 | gglite |
+|---------|--------|
+| `ggplot()` | `gglite()` |
+| `geom_point()` | `point()` |
+| `geom_line()` | `line()` |
+| ... | ... |
+:::
+
+::: {.column width="65%"}
+**Lesson 2: 구조**
+
+- `gglite()`가 반환하는 것: **fig 객체** (빈 캔버스)
+- `point()`, `line()` 등이 반환하는 것: **geom 레이어**
+- 모든 ggplot2 시각화는 `fig + geom` 형태로 구성
+- gglite도 동일: `gglite() + point(x, y)`
+:::
+
+:::
+
+:::{.callout-note}
+- `gglite()`는 `ggplot()`과 완전히 동일
+- `point()`와 `geom_point()`는 약간 차이 있음 (추후 설명)
+:::
+
+---
+
+### 사용예시
+
+::: {.panel-tabset}
+
+### ggplot2
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료 (DataFrame)**
+
+```{r}
+data(Nile)
+df = data.frame(
+    year = 1871:1970, 
+    flow = as.numeric(Nile)
+)
+head(df)
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+ggplot(df, aes(x = year, y = flow)) + geom_line()
+```
+:::
+
+:::
+
+### gglite
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료 (DataFrame)**
+
+```{r}
+data(Nile)
+df = data.frame(
+    year = 1871:1970, 
+    flow = as.numeric(Nile)
+)
+head(df)
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+gglite(df, aes(x = year, y = flow)) + geom_line()
+```
+:::
+
+:::
+
+:::
+
+---
+
 ### Design Philosophy
 
 1. **Simplicity (단순성)**
@@ -454,78 +518,273 @@ library(ggplot2)
 
 ---
 
-### Simplicity (단순성)
+### Simplicity (단순성) - Line
 
 ::: {.panel-tabset}
 
 ### gglite
 
-```{r}
-#| label: fig-chirp-gglite
-#| fig-cap: "gglite: gglite() + line(t, y_chirp)"
-#| fig-width: 5
-#| fig-height: 2.5
+::: {.columns}
 
+::: {.column width="50%"}
+**입력자료 (Vector)**
+
+```{r}
 t = seq(0, 1, length.out = 5000)
 f0 = 2; k = 50
 y_chirp = sin(2 * pi * (f0 * t + k/2 * t^2))
 
+print(t[1:5]); print(y_chirp[1:5])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
 gglite() + line(t, y_chirp)
 ```
+:::
 
-### qplot
-
-```{r}
-#| label: fig-chirp-qplot
-#| fig-cap: "qplot: qplot(t, y_chirp, geom='line')"
-#| fig-width: 5
-#| fig-height: 2.5
-
-t = seq(0, 1, length.out = 5000)
-f0 = 2; k = 50
-y_chirp = sin(2 * pi * (f0 * t + k/2 * t^2))
-
-qplot(t, y_chirp, geom="line")
-```
+:::
 
 ### ggplot2
 
-```{r}
-#| label: fig-chirp-ggplot2
-#| fig-cap: "ggplot2: ggplot(df, aes(x=t, y=y)) + geom_line()"
-#| fig-width: 5
-#| fig-height: 2.5
+::: {.columns}
 
+::: {.column width="50%"}
+**입력자료 (DataFrame)**
+
+```{r}
 t = seq(0, 1, length.out = 5000)
 f0 = 2; k = 50
 y_chirp = sin(2 * pi * (f0 * t + k/2 * t^2))
 
-df = data.frame(t=t, y=y_chirp)
-ggplot(df, aes(x=t, y=y)) + geom_line()
+df = data.frame(t = t, y = y_chirp)  # 😩😩😩
+print(df[1:5, ])
 ```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+ggplot(df, aes(x = t, y = y)) + geom_line()
+```
+:::
+
+:::
+
+### qplot
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료 (Vector)**
+
+```{r}
+t = seq(0, 1, length.out = 5000)
+f0 = 2; k = 50
+y_chirp = sin(2 * pi * (f0 * t + k/2 * t^2))
+
+print(t[1:5]); print(y_chirp[1:5])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+qplot(t, y_chirp, geom = "line")
+```
+:::
+
+:::
 
 :::
 
 ---
 
-### Compatibility (호환성)
+### Simplicity (단순성) - Boxplot
 
-**나일강 유량: 특정 시점 강조하기**
+::: {.panel-tabset}
+
+### gglite
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료 (Vector)**
 
 ```{r}
-#| label: fig-ggplot2-compatibility
-#| fig-cap: "Nile River flow time series highlighting the 1898 dam construction"
+set.seed(42)
+y = rnorm(30, 10, 2)
 
-data(Nile)
-df = data.frame(year=1871:1970, flow=as.numeric(Nile))
-dam_index = which(df$year == 1898)
-gglite(data=df) +
-  geom_line(aes(x=year, y=flow), alpha=0.5) +
-  geom_vline(xintercept=1898, linetype=2, color="gray50") +
-  point(1898, df$flow[dam_index], col=2, cex=2) +
-  annotate("text", x = 1898, y = df$flow[dam_index] + 150,
-           label = "Dam construction (1898)", size = 3.5, color = "darkred")
+print(y[1:5])
 ```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+gglite() + boxplot(y)
+```
+:::
+
+:::
+
+### ggplot2
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료 (DataFrame)**
+
+```{r}
+set.seed(42)
+y = rnorm(30, 10, 2)
+
+df = data.frame(y = y)  # 😩😩😩
+print(df[1:5, , drop = FALSE])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+ggplot(df, aes(y = y)) + geom_boxplot()
+```
+:::
+
+:::
+
+### qplot
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료 (Vector)**
+
+```{r}
+set.seed(42)
+y = rnorm(30, 10, 2)
+
+print(y[1:5])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+qplot(y = y, geom = "boxplot")
+```
+:::
+
+:::
+
+:::
+
+---
+
+### Simplicity (단순성) - Barplot
+
+::: {.panel-tabset}
+
+### gglite
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료 (Vector)**
+
+```{r}
+y = c(1, 2, 5, 4)
+
+print(y)
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+gglite() + col(y)
+```
+:::
+
+:::
+
+### ggplot2
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료 (DataFrame)**
+
+```{r}
+y = c(1, 2, 5, 4)
+
+df = data.frame(x = 1:4, y = y)  # 😩😩😩
+print(df)
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+ggplot(df, aes(x = x, y = y)) + geom_col()
+```
+:::
+
+:::
+
+### qplot
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료 (Vector)**
+
+```{r}
+y = c(1, 2, 5, 4)
+
+print(y)
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+qplot(x = 1:4, y = y, geom = "col")
+```
+:::
+
+:::
+
+:::
 
 ---
 
@@ -533,181 +792,899 @@ gglite(data=df) +
 
 ::: {.panel-tabset}
 
-### qplot
+### gglite
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
 
 ```{r}
-#| label: fig-nile-qplot
-#| fig-cap: "qplot()은 새로운 ggplot 객체를 생성하여 별도 플롯이 출력됨"
-#| fig-width: 8
-#| fig-height: 2.5
-# 시도: qplot으로 점 추가
 data(Nile)
-df = data.frame(year=1871:1970, flow=as.numeric(Nile))
-dam_index = which(df$year == 1898)
+df = data.frame(
+    year = 1871:1970,
+    flow = as.numeric(Nile)
+)
+dam_year = 1898
+dam_flow = df$flow[df$year == dam_year]
+print(df[1:2, ]); print(dam_year); print(dam_flow)
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 1.8
 gglite(data=df) +
   geom_line(aes(x=year, y=flow), alpha=0.5) +
-  geom_vline(xintercept=1898, linetype=2, color="gray50") +
-  qplot(1898, 828, geom="point", color=I("red"), size=I(2)) +  # 에러!
-  annotate("text", x = 1898, y = df$flow[dam_index] + 150,
-           label = "Dam construction (1898)", size = 3.5, color = "darkred")
-
-# 에러이유: `qplot()`은 새로운 ggplot 객체를 생성함.            
+  geom_vline(xintercept=dam_year, linetype=2) +
+  # 😊😊😊
+  point(dam_year, dam_flow, col=2, cex=2) +
+  annotate(
+    "text", x = dam_year, y = dam_flow + 150,
+    label = "Dam construction (1898)",
+)
 ```
+:::
 
+:::
 
-### ggplot2 (별도 DF)
+### qplot
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
 
 ```{r}
-#| label: fig-nile-ggplot2-df
-#| fig-cap: "ggplot2: df_point 생성 후 geom_point(data=df_point, ...)"
-#| fig-width: 5
-#| fig-height: 2.5
 data(Nile)
-df = data.frame(year=1871:1970, flow=as.numeric(Nile))
-df_point = data.frame(year=1898, flow=df$flow[df$year==1898])
-ggplot(df, aes(x=year, y=flow)) +
-  geom_line(alpha=0.5) +
-  geom_vline(xintercept=1898, linetype=2, color="gray50") +
-  geom_point(data=df_point, aes(x=year, y=flow), color="red", size=2) +
-  annotate("text", x=1898, y=df_point$flow+150,
-           label="Dam construction (1898)", size=3.5, color="darkred")
+df = data.frame(
+    year = 1871:1970,
+    flow = as.numeric(Nile)
+)
+dam_year = 1898
+dam_flow = df$flow[df$year == dam_year]
+print(df[1:2, ]); print(dam_year); print(dam_flow)
 ```
+:::
 
-### ggplot2 (열 추가)
+::: {.column width="50%"}
+**시각화**
 
 ```{r}
-#| label: fig-nile-ggplot2-col
-#| fig-cap: "ggplot2: is_dam 열 추가 후 필터링"
 #| fig-width: 5
-#| fig-height: 2.5
+#| fig-height: 1.8
+gglite(data=df) +
+  geom_line(aes(x=year, y=flow), alpha=0.5) +
+  geom_vline(xintercept=dam_year, linetype=2) +
+  # 😭😭😭
+  qplot(dam_year, dam_flow, geom="point") +
+  annotate(
+    "text", x = dam_year, y = dam_flow + 150,
+    label = "Dam construction (1898)"
+)
+```
+:::
+
+:::
+
+### ggplot2
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{r}
 data(Nile)
-df = data.frame(year=1871:1970, flow=as.numeric(Nile))
-df$is_dam = (df$year == 1898)
+df = data.frame(
+    year = 1871:1970,
+    flow = as.numeric(Nile)
+)
+dam_year = 1898
+dam_flow = df$flow[df$year == dam_year]
+print(df[1:2, ]); print(dam_year); print(dam_flow)
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 1.8
 ggplot(df, aes(x=year, y=flow)) +
   geom_line(alpha=0.5) +
-  geom_vline(xintercept=1898, linetype=2, color="gray50") +
-  geom_point(data=df[df$is_dam, ], color="red", size=2) +
-  annotate("text", x=1898, y=df$flow[df$is_dam]+150,
-           label="Dam construction (1898)", size=3.5, color="darkred")
+  geom_vline(xintercept=dam_year, linetype=2) +
+  # 😩😩😩
+  geom_point(data=df[df$year == dam_year, ]) +
+  annotate(
+    "text", x = dam_year, y = dam_flow + 150,
+    label = "Dam construction (1898)"
+)
 ```
+:::
+
+:::
 
 :::
 
 ---
 
-### Flexibility (유연성)
+### Convenience (편의성) - 행렬 (wideform) 입력 허용 
 
-*벡터 입력*
+::: {.panel-tabset}
+
+### gglite
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
 ```{r}
-#| label: fig-flex-vector
-#| fig-cap: "벡터 입력: gglite() + line(t, y_chirp)"
-gglite() + line(t, y_chirp)
-```
-
----
-
-### Flexibility (유연성)
-
-*행렬 입력 (Wide-form)*
-```{r}
-#| label: fig-flex-matrix
-#| fig-cap: "행렬 입력: gglite() + line(y_matrix)"
 set.seed(42)
 y_matrix = cbind(
   series1 = cumsum(rnorm(100)),
   series2 = cumsum(rnorm(100))
 )
-gglite() + line(y_matrix)  # 열 이름이 자동으로 범례가 됨
+print(y_matrix[1:3, ])
 ```
+:::
 
----
+::: {.column width="50%"}
+**시각화**
 
-### Flexibility (유연성)
-
-*Long-form 데이터프레임*
 ```{r}
-#| label: fig-flex-longform
-#| fig-cap: "Long-form DF: gglite(data=df_long) + geom_line(...)"
-# Long-form 데이터 생성
+#| fig-width: 5
+#| fig-height: 2
+# 😊😊😊
+gglite() + line(y_matrix)
+```
+:::
+
+:::
+
+### ggplot2
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{r}
 set.seed(42)
-df_long = data.frame(
-  time = rep(1:100, 2),
-  value = c(cumsum(rnorm(100)), cumsum(rnorm(100))),
-  series = rep(c("series1", "series2"), each = 100)
+y_matrix = cbind(
+  series1 = cumsum(rnorm(100)),
+  series2 = cumsum(rnorm(100))
 )
-gglite(data = df_long) + geom_line(aes(x = time, y = value, color = series))
+# 😩😩😩 Wide → Long 변환 필요
+df_long = data.frame(
+  x = rep(1:100, 2),
+  y = c(y_matrix[,1], y_matrix[,2]),
+  label = rep(c("series1", "series2"), each = 100)
+)
+print(df_long[c(1:2, 101:102), ])
 ```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 2
+ggplot(df_long, aes(x = x, y = y, col = label)) +
+  geom_line()
+```
+:::
+
+:::
+
+### matplotlib
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{python}
+#| eval: false
+import numpy as np
+np.random.seed(42)
+y_matrix = np.column_stack([
+    np.cumsum(np.random.randn(100)),
+    np.cumsum(np.random.randn(100))
+])
+print(y_matrix[:3, :])
+```
+
+```{python}
+#| echo: false
+import numpy as np
+np.random.seed(42)
+y_matrix = np.column_stack([
+    np.cumsum(np.random.randn(100)),
+    np.cumsum(np.random.randn(100))
+])
+print(y_matrix[:3, :])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{python}
+#| eval: false
+import matplotlib.pyplot as plt
+# 😊😊😊 Wide-form 직접 지원
+plt.plot(y_matrix)
+```
+
+```{python}
+#| fig-width: 5
+#| fig-height: 2
+#| echo: false
+import numpy as np
+import matplotlib.pyplot as plt
+np.random.seed(42)
+y_matrix = np.column_stack([
+    np.cumsum(np.random.randn(100)),
+    np.cumsum(np.random.randn(100))
+])
+plt.plot(y_matrix)
+plt.show()
+```
+:::
+
+:::
+
+### seaborn
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{python}
+#| eval: false
+import numpy as np
+import pandas as pd
+np.random.seed(42)
+# 😊😊😊 Wide-form DataFrame 직접 사용
+df_wide = pd.DataFrame({
+    'series1': np.cumsum(np.random.randn(100)),
+    'series2': np.cumsum(np.random.randn(100))
+})
+print(df_wide.head(3))
+```
+
+```{python}
+#| echo: false
+import numpy as np
+import pandas as pd
+np.random.seed(42)
+df_wide = pd.DataFrame({
+    'series1': np.cumsum(np.random.randn(100)),
+    'series2': np.cumsum(np.random.randn(100))
+})
+print(df_wide.head(3))
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{python}
+#| eval: false
+import seaborn as sns
+# 😊😊😊 Wide-form DataFrame 직접 사용
+sns.lineplot(data=df_wide)
+```
+
+```{python}
+#| fig-width: 5
+#| fig-height: 2
+#| echo: false
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+np.random.seed(42)
+df_wide = pd.DataFrame({
+    'series1': np.cumsum(np.random.randn(100)),
+    'series2': np.cumsum(np.random.randn(100))
+})
+sns.lineplot(data=df_wide)
+plt.show()
+```
+:::
+
+:::
+
+:::
 
 ---
 
-### Flexibility (유연성)
+### Convenience (편의성) - 행렬 (wideform) 입력 허용 (boxplot)
 
-*Matplotlib 스타일 label 파라미터*
+::: {.panel-tabset}
+
+### gglite
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
 
 ```{r}
-#| label: fig-flex-label
-#| fig-cap: "label 파라미터로 범례 자동 생성"
+set.seed(42)
+y_matrix = cbind(
+  A = rnorm(50, mean=10),
+  B = rnorm(50, mean=15),
+  C = rnorm(50, mean=12)
+)
+print(y_matrix[1:3, ])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 2
+# 😊😊😊 Wide-form 직접 지원
+gglite() + boxplot(y_matrix)
+```
+:::
+
+:::
+
+### ggplot2
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{r}
+set.seed(42)
+y_matrix = cbind(
+  A = rnorm(50, mean=10),
+  B = rnorm(50, mean=15),
+  C = rnorm(50, mean=12)
+)
+# 😩😩😩 Long-form 변환 필요
+df_long = data.frame(
+  group = rep(c("A", "B", "C"), each = 50),
+  value = c(y_matrix[,1], y_matrix[,2], y_matrix[,3])
+)
+print(df_long[c(1:2, 51:52, 101:102), ])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 5
+#| fig-height: 2
+ggplot(df_long, aes(x = group, y = value, fill = group)) +
+  geom_boxplot()
+```
+:::
+
+:::
+
+### matplotlib
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{python}
+#| eval: false
+import numpy as np
+np.random.seed(42)
+y_matrix = np.column_stack([
+    np.random.randn(50) + 10,
+    np.random.randn(50) + 15,
+    np.random.randn(50) + 12
+])
+print(y_matrix[:3, :])
+```
+
+```{python}
+#| echo: false
+import numpy as np
+np.random.seed(42)
+y_matrix = np.column_stack([
+    np.random.randn(50) + 10,
+    np.random.randn(50) + 15,
+    np.random.randn(50) + 12
+])
+print(y_matrix[:3, :])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{python}
+#| eval: false
+import matplotlib.pyplot as plt
+# 😊😊😊 Wide-form 직접 지원
+plt.boxplot(y_matrix, labels=['A', 'B', 'C']);
+```
+
+```{python}
+#| fig-width: 5
+#| fig-height: 2
+#| echo: false
+import numpy as np
+import matplotlib.pyplot as plt
+np.random.seed(42)
+y_matrix = np.column_stack([
+    np.random.randn(50) + 10,
+    np.random.randn(50) + 15,
+    np.random.randn(50) + 12
+])
+plt.boxplot(y_matrix, labels=['A', 'B', 'C']);
+plt.show()
+```
+:::
+
+:::
+
+### seaborn
+
+::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{python}
+#| eval: false
+import numpy as np
+import pandas as pd
+np.random.seed(42)
+# 😊😊😊 Wide-form DataFrame 직접 사용
+df_wide = pd.DataFrame({
+    'A': np.random.randn(50) + 10,
+    'B': np.random.randn(50) + 15,
+    'C': np.random.randn(50) + 12
+})
+print(df_wide.head(3))
+```
+
+```{python}
+#| echo: false
+import numpy as np
+import pandas as pd
+np.random.seed(42)
+df_wide = pd.DataFrame({
+    'A': np.random.randn(50) + 10,
+    'B': np.random.randn(50) + 15,
+    'C': np.random.randn(50) + 12
+})
+print(df_wide.head(3))
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{python}
+#| eval: false
+import seaborn as sns
+# 😊😊😊 Wide-form DataFrame 직접 사용
+sns.boxplot(data=df_wide)
+```
+
+```{python}
+#| fig-width: 5
+#| fig-height: 2
+#| echo: false
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+np.random.seed(42)
+df_wide = pd.DataFrame({
+    'A': np.random.randn(50) + 10,
+    'B': np.random.randn(50) + 15,
+    'C': np.random.randn(50) + 12
+})
+sns.boxplot(data=df_wide)
+plt.show()
+```
+:::
+
+:::
+
+:::
+
+---
+
+### Convenience (편의성) - Matplotlib 스타일 라벨링
+
+::: {.panel-tabset}
+
+#### matplotlib
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{python}
+#| eval: false
+import numpy as np
+np.random.seed(42)
+series1 = np.cumsum(np.random.randn(100))
+series2 = np.cumsum(np.random.randn(100))
+print(series1[:3]); print(series2[:3])
+```
+
+```{python}
+#| echo: false
+import numpy as np
+np.random.seed(42)
+series1 = np.cumsum(np.random.randn(100))
+series2 = np.cumsum(np.random.randn(100))
+print(series1[:3]); print(series2[:3])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{python}
+#| eval: false
+# 😊😊😊 label 파라미터로 범례 자동 생성
+plt.plot(series1, color='blue', label='Series 1')
+plt.plot(series2, color='red', label='Series 2')
+plt.legend()
+```
+
+```{python}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+import numpy as np
+import matplotlib.pyplot as plt
+np.random.seed(42)
+series1 = np.cumsum(np.random.randn(100))
+series2 = np.cumsum(np.random.randn(100))
+
+plt.figure(figsize=(5, 3))
+plt.plot(series1, color='blue', label='Series 1')
+plt.plot(series2, color='red', label='Series 2')
+plt.legend()
+plt.show()
+```
+:::
+
+::::
+
+#### gglite
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{r}
+set.seed(42)
+series1 = cumsum(rnorm(100))
+series2 = cumsum(rnorm(100))
+print(series1[1:3]); print(series2[1:3])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| eval: false
+# 😊😊😊 label 파라미터로 범례 자동 생성
+gglite() +
+  line(1:100, series1, col="blue", label="Series 1") +
+  line(1:100, series2, col="red", label="Series 2")
+```
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
 set.seed(42)
 series1 = cumsum(rnorm(100))
 series2 = cumsum(rnorm(100))
 
 gglite() +
-  line(1:100, series1, col="blue", lwd=1.2, label="Series 1") +
-  line(1:100, series2, col="red", lwd=1.2, label="Series 2") +
-  labs(x = "Time", y = "Value")
+  line(1:100, series1, col="blue", label="Series 1") +
+  line(1:100, series2, col="red", label="Series 2")
 ```
+:::
+
+::::
+
+#### ggplot2
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{r}
+set.seed(42)
+series1 = cumsum(rnorm(100))
+series2 = cumsum(rnorm(100))
+
+# 😩😩😩
+df_long = data.frame(
+  x = rep(1:100, 2),
+  y = c(series1, series2),
+  group = rep(c("Series 1", "Series 2"), each = 100)
+)
+print(df_long[c(1:2, 101:102), ])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| eval: false
+ggplot(df_long, aes(x, y, color = group)) +
+  geom_line() +
+  scale_color_manual(values = c("blue", "red"))
+```
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+set.seed(42)
+series1 = cumsum(rnorm(100))
+series2 = cumsum(rnorm(100))
+
+df_long = data.frame(
+  x = rep(1:100, 2),
+  y = c(series1, series2),
+  group = rep(c("Series 1", "Series 2"), each = 100)
+)
+
+ggplot(df_long, aes(x, y, color = group)) +
+  geom_line() +
+  scale_color_manual(values = c("blue", "red")) +
+  theme_minimal()
+```
+:::
+
+::::
+
+:::
 
 ---
 
-### Flexibility (유연성) {.scrollable}
+### Convenience (편의성) - Matplotlib 스타일 라벨링 (회귀분석)
 
-*객체지향적 시각화: Canvas와 Layer*
+::: {.panel-tabset}
+
+#### gglite
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
 
 ```{r}
-#| label: fig-flex-canvas
-#| fig-cap: "Canvas와 Layer의 모듈식 조합"
-#| fig-width: 14
-#| fig-height: 5
-#| out-width: 100%
-#| code-fold: true
-# 빈 캔버스 생성
-canvas = gglite()
-
-# 레이어 정의 (Frequency Hopping Signal)
-t_hopping = seq(0, 1, length.out = 5000)
-idx1 = t_hopping <= 0.5
-idx2 = t_hopping > 0.5
-
-layer1 = line(t_hopping[idx1], sin(2*pi*60*t_hopping[idx1]), col='steelblue')
-layer2 = line(t_hopping[idx2], sin(2*pi*120*t_hopping[idx2]), col='coral')
-
-# 모듈식 조합
-(canvas + layer1) | (canvas + layer2) | (canvas + layer1 + layer2)
+set.seed(42)
+x = 1:50; y = 2*x + 10 + rnorm(50, sd=5)
+fit = lm(y ~ x)
+print(coef(fit))
 ```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| eval: false
+# 😊😊😊 label로 범례 자동 생성
+gglite() +
+  point(x, y, col="black", label="Data") +
+  line(x, fitted(fit), col="red", label="Fitted")
+```
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+set.seed(42); x = 1:50; y = 2*x + 10 + rnorm(50, sd=5); fit = lm(y ~ x)
+gglite() + point(x, y, col="black", label="Data") + line(x, fitted(fit), col="red", label="Fitted")
+```
+:::
+
+::::
+
+#### ggplot2
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{r}
+set.seed(42)
+x = 1:50; y = 2*x + 10 + rnorm(50, sd=5)
+fit = lm(y ~ x)
+# 😩😩😩 Long-form 변환 필요
+df = data.frame(x=c(x,x), y=c(y,fitted(fit)), type=rep(c("Data","Fitted"), each=50))
+print(df[c(1:2, 51:52), ])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| eval: false
+ggplot(df, aes(x, y, col=type)) +
+  geom_point(data=df[df$type=="Data",]) +
+  geom_line(data=df[df$type=="Fitted",])
+```
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+set.seed(42); x = 1:50; y = 2*x + 10 + rnorm(50, sd=5); fit = lm(y ~ x)
+df = data.frame(x=c(x,x), y=c(y,fitted(fit)), type=rep(c("Data","Fitted"), each=50))
+ggplot(df, aes(x, y, col=type)) + geom_point(data=df[df$type=="Data",]) + geom_line(data=df[df$type=="Fitted",])
+```
+:::
+
+::::
+
+#### base R
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{r}
+set.seed(42)
+x = 1:50; y = 2*x + 10 + rnorm(50, sd=5)
+fit = lm(y ~ x)
+print(coef(fit))
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| eval: false
+plot(x, y); lines(x, fitted(fit), col="red")
+# 😩😩😩 legend() 수동 설정
+legend("topleft", c("Data","Fitted"), pch=c(1,NA), lty=c(NA,1), col=c(1,2))
+```
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3
+set.seed(42); x = 1:50; y = 2*x + 10 + rnorm(50, sd=5); fit = lm(y ~ x)
+plot(x, y); lines(x, fitted(fit), col="red")
+legend("topleft", c("Data","Fitted"), pch=c(1,NA), lty=c(NA,1), col=c(1,2))
+```
+:::
+
+::::
+
+:::
 
 ---
 
-### Flexibility (유연성)
+### Convenience (편의성) - 객체지향적 시각화
 
-*객체지향적 시각화: 기본플랏 + 레이어추가*
+::: {.panel-tabset}
+
+#### gglite
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
 
 ```{r}
-#| label: fig-flex-layer
-#| fig-cap: "기본 플롯에 레이어 추가"
-# 기본 플롯
-base_plot = gglite() + line(t, y_chirp)
-
-# 조건에 따라 레이어 추가
-enhanced_plot = base_plot +
-  point(t[seq(1, 500, by=50)], y_chirp[seq(1, 500, by=50)], cex=2)
-
-enhanced_plot
+t1 = seq(0, 0.5, length.out=500)
+y1 = sin(2*pi*30*t1)
+t2 = seq(0.5, 1, length.out=500)
+y2 = sin(2*pi*60*t2)
+print(t1[1:5]);print(t2[1:5]);print(y1[1:5]);print(y2[1:5])
 ```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| fig-width: 7
+#| fig-height: 2.5
+g = gglite()
+L1 = line(t1, y1, col='steelblue')
+L2 = line(t2, y2, col='coral')
+
+(g + L1) | (g + L2) | (g + L1 + L2)
+```
+
+:::
+
+::::
+
+#### ggplot2
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**입력자료**
+
+```{r}
+t1 = seq(0, 0.5, length.out=500)
+y1 = sin(2*pi*30*t1)
+t2 = seq(0.5, 1, length.out=500)
+y2 = sin(2*pi*60*t2)
+d1 = data.frame(x=t1, y=y1)
+d2 = data.frame(x=t2, y=y2)
+print(d1[1:2,]);print(d2[1:2,])
+```
+:::
+
+::: {.column width="50%"}
+**시각화**
+
+```{r}
+#| eval: false
+g = ggplot()
+L1 = geom_line(data=d1, aes(x, y), col='steelblue')
+L2 = geom_line(data=d2, aes(x, y), col='coral')
+
+(g + L1) | (g + L2) | (g + L1 + L2)
+```
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 2.5
+g = ggplot()
+t1 = seq(0, 0.5, length.out=500); y1 = sin(2*pi*30*t1)
+t2 = seq(0.5, 1, length.out=500); y2 = sin(2*pi*60*t2)
+d1 = data.frame(x=t1, y=y1); d2 = data.frame(x=t2, y=y2)
+L1 = geom_line(data=d1, aes(x, y), col='steelblue')
+L2 = geom_line(data=d2, aes(x, y), col='coral')
+((g + L1) | (g + L2) | (g + L1 + L2)) & theme_minimal()
+```
+:::
+
+::::
+
+:::
+
 
 ---
 
 ### 감사합니다
 
 ---
+
+
 
 ### References

@@ -1,4 +1,8 @@
-gglite
 ggplot2
+gglite
 dplyr
 patchwork
+reticulate
+usethis
+devtools
+ebt
