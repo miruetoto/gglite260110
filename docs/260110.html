@@ -117,7 +117,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-9097db3e4dca378c164fe3c208d00001.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-9d1105083f944255eadc947f6b28c744.css">
   <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -338,7 +338,30 @@
 <p><code>예제3</code> – 시뮬레이션 실행 관리 - <em><code>run.R</code> 을 실행하여 시뮬레이션을 하고 싶거든? 그런데 파라메터를 바꿔가면서 결과를 저장해야해. gamma=0~1까지 0.1간격으로 증가시키고 theta=0.01~0.05까지 0.01간격으로 증가시켜서 돌려서 결과저장해줘. CPU의 상황을 보고 병렬처리해줘, 다 돌아가면 메일보내줘.</em></p>
 <p><code>예제4</code> – 실험결과 정리 및 요약 - <em>실험결과돌아간것 나한테 리포트해줘, (<code>xxxx</code>폴더에 결과있음) 최적값이 뭐야?</em> + <em>하나돌리는 얼마나 걸렸어?</em> + <em>gamma=0.5에서 값만 알려줄래?</em></p>
 <p><code>예제5</code> – LaTeX 표 삽입 - <em>gamma&lt;0.5인 결과만 선택해서 <code>paper.tex</code>의 섹션3의 적당한 위치에 표를 정리해서 넣어줘. (그림을 붙여넣으며) 표는 첨부된 파일과 비슷한 양식으로 만들어줘.</em></p>
+<h3 id="에이전틱-코딩의-활용-2">에이전틱 코딩의 활용</h3>
 <p><code>예제6</code> – 그림 그리기</p>
+<div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">복잡한그림1</a></li><li><a href="#tabset-3-2">복잡한그림2</a></li><li><a href="#tabset-3-3">간단한그림</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
+<p><embed data-src="figs/복잡한그림1.pdf" height="400"></p>
+</div>
+<div id="tabset-3-2">
+<p><embed data-src="figs/복잡한그림2.pdf" height="400"></p>
+</div>
+<div id="tabset-3-3">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-1-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="도구2-gglite" class="title-slide slide level1 center">
@@ -406,9 +429,9 @@
 
 <h3 id="simplicity-단순성---line">Simplicity (단순성) - Line</h3>
 <div class="panel-tabset">
-<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">gglite</a></li><li><a href="#tabset-3-2">ggplot2</a></li><li><a href="#tabset-3-3">qplot</a></li></ul>
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">gglite</a></li><li><a href="#tabset-4-2">ggplot2</a></li><li><a href="#tabset-4-3">qplot</a></li></ul>
 <div class="tab-content">
-<div id="tabset-3-1">
+<div id="tabset-4-1">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료 (Vector)</strong></p>
@@ -432,14 +455,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-2-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-3-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-3-2">
+<div id="tabset-4-2">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료 (DataFrame)</strong></p>
@@ -466,14 +489,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-4-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-5-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-3-3">
+<div id="tabset-4-3">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료 (Vector)</strong></p>
@@ -497,7 +520,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-6-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-7-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -511,9 +534,9 @@
 
 <h3 id="simplicity-단순성---boxplot">Simplicity (단순성) - Boxplot</h3>
 <div class="panel-tabset">
-<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">gglite</a></li><li><a href="#tabset-4-2">ggplot2</a></li><li><a href="#tabset-4-3">qplot</a></li></ul>
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">gglite</a></li><li><a href="#tabset-5-2">ggplot2</a></li><li><a href="#tabset-5-3">qplot</a></li></ul>
 <div class="tab-content">
-<div id="tabset-4-1">
+<div id="tabset-5-1">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료 (Vector)</strong></p>
@@ -533,14 +556,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-8-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-9-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-4-2">
+<div id="tabset-5-2">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료 (DataFrame)</strong></p>
@@ -566,14 +589,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-10-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-11-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-4-3">
+<div id="tabset-5-3">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료 (Vector)</strong></p>
@@ -593,7 +616,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-12-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-13-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -607,9 +630,9 @@
 
 <h3 id="simplicity-단순성---barplot">Simplicity (단순성) - Barplot</h3>
 <div class="panel-tabset">
-<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">gglite</a></li><li><a href="#tabset-5-2">ggplot2</a></li><li><a href="#tabset-5-3">qplot</a></li></ul>
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">gglite</a></li><li><a href="#tabset-6-2">ggplot2</a></li><li><a href="#tabset-6-3">qplot</a></li></ul>
 <div class="tab-content">
-<div id="tabset-5-1">
+<div id="tabset-6-1">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료 (Vector)</strong></p>
@@ -628,14 +651,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-14-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-15-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-5-2">
+<div id="tabset-6-2">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료 (DataFrame)</strong></p>
@@ -659,14 +682,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-16-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-17-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-5-3">
+<div id="tabset-6-3">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료 (Vector)</strong></p>
@@ -685,7 +708,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-18-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-19-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -704,9 +727,9 @@
 
 <h3 id="compatibility-호환성-1">Compatibility (호환성)</h3>
 <div class="panel-tabset">
-<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">gglite</a></li><li><a href="#tabset-6-2">qplot</a></li><li><a href="#tabset-6-3">ggplot2</a></li></ul>
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">gglite</a></li><li><a href="#tabset-7-2">qplot</a></li><li><a href="#tabset-7-3">ggplot2</a></li></ul>
 <div class="tab-content">
-<div id="tabset-6-1">
+<div id="tabset-7-1">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -746,14 +769,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-20-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-21-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-6-2">
+<div id="tabset-7-2">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -793,14 +816,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-22-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-23-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-6-3">
+<div id="tabset-7-3">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -840,7 +863,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-24-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-25-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -859,9 +882,9 @@
 
 <h3 id="convenience-편의성---행렬-wideform-입력-허용">Convenience (편의성) - 행렬 (wideform) 입력 허용</h3>
 <div class="panel-tabset">
-<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">gglite</a></li><li><a href="#tabset-7-2">ggplot2</a></li><li><a href="#tabset-7-3">matplotlib</a></li><li><a href="#tabset-7-4">seaborn</a></li></ul>
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">gglite</a></li><li><a href="#tabset-8-2">ggplot2</a></li><li><a href="#tabset-8-3">matplotlib</a></li><li><a href="#tabset-8-4">seaborn</a></li></ul>
 <div class="tab-content">
-<div id="tabset-7-1">
+<div id="tabset-8-1">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -887,14 +910,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-26-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-27-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-7-2">
+<div id="tabset-8-2">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -927,14 +950,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-28-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-29-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-7-3">
+<div id="tabset-8-3">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -965,14 +988,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-32-1.png" width="960"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-33-1.png" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-7-4">
+<div id="tabset-8-4">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1006,7 +1029,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-36-3.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-37-3.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -1020,9 +1043,9 @@
 
 <h3 id="convenience-편의성---행렬-wideform-입력-허용-boxplot">Convenience (편의성) - 행렬 (wideform) 입력 허용 (boxplot)</h3>
 <div class="panel-tabset">
-<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">gglite</a></li><li><a href="#tabset-8-2">ggplot2</a></li><li><a href="#tabset-8-3">matplotlib</a></li><li><a href="#tabset-8-4">seaborn</a></li></ul>
+<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">gglite</a></li><li><a href="#tabset-9-2">ggplot2</a></li><li><a href="#tabset-9-3">matplotlib</a></li><li><a href="#tabset-9-4">seaborn</a></li></ul>
 <div class="tab-content">
-<div id="tabset-8-1">
+<div id="tabset-9-1">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1049,14 +1072,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-38-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-39-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-8-2">
+<div id="tabset-9-2">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1091,14 +1114,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-40-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-41-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-8-3">
+<div id="tabset-9-3">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1130,14 +1153,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-44-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-45-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-8-4">
+<div id="tabset-9-4">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1172,7 +1195,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-48-3.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-49-3.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -1186,9 +1209,9 @@
 
 <h3 id="convenience-편의성---matplotlib-스타일-라벨링">Convenience (편의성) - Matplotlib 스타일 라벨링</h3>
 <div class="panel-tabset">
-<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">matplotlib</a></li><li><a href="#tabset-9-2">gglite</a></li><li><a href="#tabset-9-3">ggplot2</a></li></ul>
+<ul id="tabset-10" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-10-1">matplotlib</a></li><li><a href="#tabset-10-2">gglite</a></li><li><a href="#tabset-10-3">ggplot2</a></li></ul>
 <div class="tab-content">
-<div id="tabset-9-1">
+<div id="tabset-10-1">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1217,14 +1240,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-52-5.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-53-5.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-9-2">
+<div id="tabset-10-2">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1252,14 +1275,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-55-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-56-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-9-3">
+<div id="tabset-10-3">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1294,7 +1317,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-58-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-59-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -1308,9 +1331,9 @@
 
 <h3 id="convenience-편의성---matplotlib-스타일-라벨링-회귀분석">Convenience (편의성) - Matplotlib 스타일 라벨링 (회귀분석)</h3>
 <div class="panel-tabset">
-<ul id="tabset-10" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-10-1">gglite</a></li><li><a href="#tabset-10-2">ggplot2</a></li><li><a href="#tabset-10-3">base R</a></li></ul>
+<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">gglite</a></li><li><a href="#tabset-11-2">ggplot2</a></li><li><a href="#tabset-11-3">base R</a></li></ul>
 <div class="tab-content">
-<div id="tabset-10-1">
+<div id="tabset-11-1">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1336,14 +1359,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-61-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-62-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-10-2">
+<div id="tabset-11-2">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1373,14 +1396,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-64-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-65-1.png" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-10-3">
+<div id="tabset-11-3">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1405,7 +1428,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-67-1.png" width="480"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-68-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -1419,9 +1442,9 @@
 
 <h3 id="convenience-편의성---객체지향적-시각화">Convenience (편의성) - 객체지향적 시각화</h3>
 <div class="panel-tabset">
-<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">gglite</a></li><li><a href="#tabset-11-2">ggplot2</a></li></ul>
+<ul id="tabset-12" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-12-1">gglite</a></li><li><a href="#tabset-12-2">ggplot2</a></li></ul>
 <div class="tab-content">
-<div id="tabset-11-1">
+<div id="tabset-12-1">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1455,14 +1478,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-69-1.png" width="672"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-70-1.png" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
 </div>
-<div id="tabset-11-2">
+<div id="tabset-12-2">
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>입력자료</strong></p>
@@ -1498,7 +1521,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-72-1.png" width="672"></p>
+<p><img data-src="260110_files/figure-revealjs/unnamed-chunk-73-1.png" width="672"></p>
 </figure>
 </div>
 </div>

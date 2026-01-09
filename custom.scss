@@ -1,25 +1,30 @@
 /* custom.scss - Reveal.js 테마 정의 */
 
 /*-- scss:defaults --*/
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+
+$primary-font: 'Nanum Myeongjo', serif;
+$heading-font: 'Nanum Myeongjo', serif;
 $headingColor: #ff6f61;
 $textColor: #333;
 $linkColor: #ff6f61;
 $linkHoverColor: #d64b40;
+$backgroundColor: #fcfcf7;
 
 /*-- scss:rules --*/
 .reveal {
-  font-family: 'NanumMyeongjo', serif;
+  font-family: $primary-font;
   background-color: $backgroundColor;
   color: $textColor;
 
-  * {
-    font-family: serif !important;
-  }
-
   h1, h2, h3, h4, h5, h6 {
     color: $headingColor;
-    font-family: 'NanumMyeongjo', serif !important;
+    font-family: $heading-font !important;
     font-weight: bold !important;
+  }
+
+  p, li {
+    font-family: $primary-font;
   }
 
   a {
