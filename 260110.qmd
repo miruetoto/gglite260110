@@ -36,8 +36,6 @@ library(patchwork)
 1. 생성형AI 소개: 에이전틱 코딩 위주
 2. 새로운 시각화 패키지 `gglite` 소개
 
----
-
 # 도구1: 에이전틱AI
 
 ---
@@ -170,7 +168,10 @@ library(ggplot2)
    - 기존 ggplot2 문법 및 확장과의 완전한 호환성 유지
 
 3. **Convenience (편의성)**
-   - 데이터프레임 변환 없이 벡터/행렬을 직접 시각화
+   - 타 시각화 패키지의 편리한 기능들을 선별적으로 도입
+
+
+# Simplicity (단순성)
 
 ---
 
@@ -442,6 +443,8 @@ qplot(x = 1:4, y = y, geom = "col")
 
 :::
 
+# Compatibility (호환성)
+
 ---
 
 ### Compatibility (호환성)
@@ -566,6 +569,8 @@ ggplot(df, aes(x=year, y=flow)) +
 :::
 
 :::
+
+# Convenience (편의성)
 
 ---
 
@@ -1326,7 +1331,7 @@ t2 = seq(0.5, 1, length.out=500); y2 = sin(2*pi*60*t2)
 d1 = data.frame(x=t1, y=y1); d2 = data.frame(x=t2, y=y2)
 L1 = geom_line(data=d1, aes(x, y), col='steelblue')
 L2 = geom_line(data=d2, aes(x, y), col='coral')
-((g + L1) | (g + L2) | (g + L1 + L2)) & theme_minimal()
+((g + L1) | (g + L2) | (g + L1 + L2)) 
 ```
 :::
 
@@ -1334,6 +1339,7 @@ L2 = geom_line(data=d2, aes(x, y), col='coral')
 
 :::
 
+- *서브플랏은 [`patchwork`](https://patchwork.data-imaginist.com/) 사용*
 
 ---
 
