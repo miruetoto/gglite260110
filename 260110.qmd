@@ -119,7 +119,7 @@ library(patchwork)
 
 ### gglite란?
 
-**gglite**: ggplot2의 **보완재**로서, 빠른 탐색적 그래픽 생성을 위한 경량 R 패키지
+**gglite**: ggplot2 @wickham2016ggplot2 의 **보완재**로서, 빠른 탐색적 그래픽 생성을 위한 경량 R 패키지
 
 - ggplot2 생태계와 **완전한 상호운용성** 유지 (함께 사용)
 - qplot이 목표했던 "빠른 시각화"를 **제대로 완성**
@@ -1340,8 +1340,6 @@ L2 = geom_line(data=d2, aes(x, y), col='coral')
 :::
 
 - *서브플랏은 [`patchwork`](https://patchwork.data-imaginist.com/) 사용*
-
----
 
 # 감사합니다
 
