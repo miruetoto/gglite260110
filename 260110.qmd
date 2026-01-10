@@ -1,5 +1,5 @@
 ---
-title: "에이전틱AI / gglite"
+title: "gglite: A Lightweight and Intuitive R Package for Extending Graphic Grammar"
 bibliography: ref.bib
 author: "최규빈"
 subtitle: "다중척도 워크샵 2026"
@@ -130,13 +130,13 @@ library(patchwork)
 
 - 이런 그림도 클로드코드로 쉽게 그릴 수 있고
 
-![](figs/복잡한그림1.pdf){height="400px"}
+![ . ](figs/복잡한그림1.png){height="400px"}
 
 #### 복잡한그림2
 
 - 이런 그림을 그리는 코드도 쉽게 구할 수 있음. 
 
-![](figs/복잡한그림2.pdf){height="400px"}
+![ . ](figs/복잡한그림2.png){height="400px"}
 
 #### 간단한그림
 
